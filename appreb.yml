@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: apprep
+  namespace: webapp
+  labels:
+    app: employees
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: employees
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: employees
+        version: v1
+    spec:
+      containers:
+      - name: apprep
+        image:  795985889962.dkr.ecr.us-east-1.amazonaws.com/salman:app_v1
+        env:
+        - name: DBHOST
+          value: database-service.sqldb.svc.cluster.local
+        - name: DBPORT
+          value: "3306"
+        - name: DATABASE
+          value: "employees"
+        - name: DBPWD
+          valueFrom:
+            secretKeyRef:
+              name: db-password
+              key: password
+        - name: DBUSER
+          value: root
+        - name: APP_COLOR
+          value: "blue"
+        ports:
+        - containerPort: 8080
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
