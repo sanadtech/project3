@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: application
+  namespace: webapp
+spec:
+  containers:
+  - name: app
+    image: 795985889962.dkr.ecr.us-east-1.amazonaws.com/salman:app_v1
+    env:
+      - name: DBHOST
+        value: database-service.sqldb.svc.cluster.local
+      - name: DBPORT
+        value: "3306"
+      - name: DATABASE
+        value: "employees"
+      - name: DBPWD
+        valueFrom:
+          secretKeyRef:
+            name: db-password
+            key: password
+      - name: DBUSER
+        value: root
+      - name: APP_COLOR
+        value: "blue"
+    ports:
+    - containerPort: 8080
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
