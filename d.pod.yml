@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: database
+  namespace: sqldb
+  labels:
+    app: database
+spec:
+  containers:
+  - name: database
+    image: 795985889962.dkr.ecr.us-east-1.amazonaws.com/salman:slm_dm
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: db-password
+          key: password
+    - name: DATABASE
+      value: "employees"
+    ports:
+    - containerPort: 3306
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 1000Mi
