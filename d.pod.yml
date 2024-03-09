@@ -24,6 +24,5 @@ spec:
     - containerPort: 3306
     resources:
       requests:
-        cpu: "100m"    # Adjusted CPU request
-        memory: "100Mi" # Adjusted memory request
-
+        cpu: "100m"    
+        memory: "100Mi" 
