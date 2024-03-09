@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  namespace: sqldb
+  labels:
+    app: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: 795985889962.dkr.ecr.us-east-1.amazonaws.com/salman:slm_dm
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-password
+                key: password
+        ports:
+          - containerPort: 3306
+      imagePullSecrets:
+      - name: database
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
