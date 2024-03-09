@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-deployment-v1
+  namespace: webapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: employee
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: employee
+        version: v1
+    spec:
+      containers:
+        - name: employee
+          image: 795985889962.dkr.ecr.us-east-1.amazonaws.com/salman:app_v1
+          env:
+            - name: DBHOST
+              value: database-service.sqldb.svc.cluster.local
+            - name: DBPORT
+              value: "3306"
+            - name: DATABASE
+              value: "employees"
+            - name: DBPWD
+              valueFrom:
+                secretKeyRef:
+                  name: db-password
+                  key: password
+            - name: DBUSER
+              value: root
+            - name: APP_COLOR
+              value: "blue"
+          ports:
+            - containerPort: 8080
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
