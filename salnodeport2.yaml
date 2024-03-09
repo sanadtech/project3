@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: employee
-    version: v2 # Add version selector for v1
+    version: v2
   ports:
     - protocol: TCP
       port: 80
